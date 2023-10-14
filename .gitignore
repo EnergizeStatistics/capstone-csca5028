@@ -1,0 +1,6 @@
+/.idea/
+/database/Carbon.sqlite3
+__pycache__/
+__pycache__/
+/venv/
+!.gitkeep

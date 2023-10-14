@@ -1,0 +1,20 @@
+{
+  "db_dir": "./database/",
+  "db_file_path": "./database/Carbon.sqlite3",
+  "database": {"url": "sqlite:///./database/Carbon.sqlite3"},
+  "data_retrieval": {
+    "interval_minutes": 6
+  },
+  "GET_DATA_INTERVAL": 6,
+  "celery": {
+    "//broker_url": "pyamqp://guest@localhost//" , "//": "Replace with your RabbitMQ server information",
+    "broker_url": "amqp://localhost:5672/",
+    "broker_connection_retry_on_startup": true,
+    "broker_connection_retry": true,
+    "result_backend": "rpc://",
+    "task_serializer": "json",
+    "result_serializer": "json",
+    "accept_content": ["json"],
+    "enable_utc": true
+  }
+}

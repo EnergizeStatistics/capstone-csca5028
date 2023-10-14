@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Date Range Summary</title>
+</head>
+<body>
+    <h1>Date Range Summary</h1>
+
+    <form method="POST" action="/summary" onsubmit="return validateForm()">
+        <label for="from_datetime"><u>F</u>rom Time:</label>
+        <input
+                type="datetime-local"
+                name="from_datetime"
+                id="from_datetime"
+                accesskey="f"
+        />
+        <label for="to_datetime"><u>T</u>o Time:</label>
+        <input
+                type="datetime-local"
+                name="to_datetime"
+                id="to_datetime"
+                required
+                accesskey="t"
+        />
+        <button type="submit" accesskey="s"><u>S</u>ubmit</button>
+    </form>
+
+    <div id="summary">
+        <!-- Summary statistics will be displayed here -->
+    </div>
+
+    <script>
+        function validateForm() {
+            var fromSelect = document.getElementById("from_date");
+            var toSelect = document.getElementById("to_date");
+
+            var fromValue = fromSelect.options[fromSelect.selectedIndex].value;
+            var toValue = toSelect.options[toSelect.selectedIndex].value;
+
+            var fromValid = /^.*:(00|30):00$/.test(fromValue);
+            var toValid = /^.*:(00|30):00$/.test(toValue);
+
+            if (!fromValid || !toValid) {
+                alert("Invalid date selection. Dates must be on the hour or half-hour.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>
