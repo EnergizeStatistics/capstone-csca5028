@@ -129,4 +129,4 @@ def render_results(results, from_datetime_str, to_datetime_str):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.environ.get('PORT', 5000))
+    app.run(debug=True, port=os.environ.get('PORT') or 5000, host=os.environ.get('HOST') or '0.0.0.0')

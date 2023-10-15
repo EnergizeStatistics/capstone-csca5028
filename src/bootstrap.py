@@ -1,5 +1,6 @@
 import os
 import json
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import statsd
@@ -30,10 +31,11 @@ db = SQLAlchemy(app)
 
 statsd_client = statsd.StatsClient('localhost', 8125, prefix='carbon_intensity')
 
+config['celery']['broker_url'] = os.environ.get('CLOUDAMQP_URL') or config['celery']['broker_url']
+
 celery = Celery(
     app.import_name,
-    broker=os.environ.get("CLOUDAMQP_URL") or config['celery']['broker_url'],
-    key=os.environ.get("CLOUDAMQP_APIKEY") or config['celery']['broker_apikey'],
+    broker=config['celery']['broker_url'],
     include=['src.time_series_analysis']
 )
 celery.conf.update(config['celery'])
