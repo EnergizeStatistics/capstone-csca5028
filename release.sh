@@ -1,6 +1,7 @@
 #! /bin/bash
 
-if [ -z "PORT" ] ; then
+if [ -z "$PORT" ] ; then
+	echo "Fatal: missing mandatory environment variable PORT." 1>&2
 	exit -1
 fi
 
