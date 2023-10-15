@@ -1,6 +1,18 @@
-/.idea/
-/database/Carbon.sqlite3
-__pycache__/
-__pycache__/
-/venv/
+# enables us to reserve directory names for resources
 !.gitkeep
+
+# such as these.
+/database/
+/venv/
+
+# Intelij
+/.idea/
+
+# vim
+.*.sw?
+.sw?
+
+# python?
+__pycache__/
+__pycache__/
+
