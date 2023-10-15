@@ -32,7 +32,8 @@ statsd_client = statsd.StatsClient('localhost', 8125, prefix='carbon_intensity')
 
 celery = Celery(
     app.import_name,
-    broker=config['celery']['broker_url'],
+    broker=os.environ.get("CLOUDAMQP_URL") or config['celery']['broker_url'],
+    key=os.environ.get("CLOUDAMQP_APIKEY") or config['celery']['broker_apikey'],
     include=['src.time_series_analysis']
 )
 celery.conf.update(config['celery'])
