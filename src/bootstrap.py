@@ -25,7 +25,7 @@ app.app_context().push()
 db_dir = os.path.join(project_root, 'database')
 os.makedirs(db_dir, exist_ok=True)
 db_file_path = os.path.join(db_dir, 'Carbon.sqlite3')
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///" + os.path.abspath(db_file_path)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('JAWSDB_URL') or "sqlite:///" + os.path.abspath(db_file_path)
 db = SQLAlchemy(app)
 
 

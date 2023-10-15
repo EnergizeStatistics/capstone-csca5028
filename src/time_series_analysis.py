@@ -1,4 +1,4 @@
-from bootstrap import app, db, statsd_client, celery
+from src.bootstrap import app, db, statsd_client, celery
 from src.fetch_data import CarbonIntensityRecord
 import pandas as pd
 import time
