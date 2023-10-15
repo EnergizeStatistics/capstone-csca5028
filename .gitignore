@@ -3,7 +3,8 @@
 
 # such as these.
 /database/
-/venv/
+# checking in venv for heroku
+#/venv/
 
 # Intelij
 /.idea/
