@@ -49,6 +49,7 @@ class CarbonIntensityAnalyzer:
 
         return df
 
+
     def calculate_statistics(self, df):
         # Calculate mean, median, variance, and standard deviation
         mean_values = df['intensity_actual'].mean()
@@ -70,33 +71,19 @@ class CarbonIntensityAnalyzer:
         # Load data from the database
         data_df = self.load_data_from_db()
 
-        if data_df is not None:
-            # Preprocess the data (carry forward NaN values)
-            data_df = self.preprocess_data(data_df)
+        if data_df is None or 0 == len(data_df):
+            return None, None, None, None
 
-            result = self.calculate_statistics(data_df)
-            millisecond_duration = int((time.time() - start) * 1000)
-            statsd_client.timer("analyze", millisecond_duration)
-            return result
+        # Preprocess the data (carry forward NaN values)
+        data_df = self.preprocess_data(data_df)
 
-        statsd_client.incr(f"unexpected_error in CarbonIntensityAnalyzer.analyze")
-        Exception("No data found")
-        # Calculate statistics
-        # mean_values, median_values, variance_values, std_deviation_values = (
-        #     self.calculate_statistics(data_df))
-        #
-        # # Print the calculated statistics
-        # print("Mean Values:")
-        # print(mean_values)
-        # print("\nMedian Values:")
-        # print(median_values)
-        # print("\nVariance Values:")
-        # print(variance_values)
-        # print("\nStandard Deviation Values:")
-        # print(std_deviation_values)
+        result = self.calculate_statistics(data_df)
+        millisecond_duration = int((time.time() - start) * 1000)
+        statsd_client.timer("analyze", millisecond_duration)
+        return result
 
 
-@celery.task
+@celery.task(retry_kwargs={'max_retries': 3})
 def analyze(from_dt, to_dt):
     analyzer = CarbonIntensityAnalyzer(from_dt, to_dt)
     result = analyzer.analyze()

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# get docker per https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+# getting docker per https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 apt-get update
 apt-get install ca-certificates curl gnupg
 install -m 0755 /etc/apt/keyrings
@@ -12,6 +12,6 @@ echo \
   tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update
 
-# in a production environment, these would be version pinned
+# these would be pinned to at least a minor version if we controlled the executing environment, but apt will probably do better than we could at picking versions given the variation between different students' environments.
 apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 

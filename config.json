@@ -11,6 +11,7 @@
     "broker_url": "amqp://localhost:5672/",
     "broker_connection_retry_on_startup": true,
     "broker_connection_retry": true,
+    "broker_pool_limit":1, "//brokerpoollimit":"Must be 1 for free cloudampqp plan",
     "result_backend": "rpc://",
     "task_serializer": "json",
     "result_serializer": "json",
