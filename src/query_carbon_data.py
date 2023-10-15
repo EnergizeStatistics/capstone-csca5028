@@ -1,3 +1,5 @@
+import os
+
 from src.bootstrap import app, statsd_client, db
 from flask import render_template, request
 from datetime import datetime
@@ -69,4 +71,4 @@ def render_results(results, from_datetime_str, to_datetime_str):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=os.environ.get('PORT', 5000))
