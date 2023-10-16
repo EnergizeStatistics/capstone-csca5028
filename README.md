@@ -2,6 +2,8 @@
 
 This project is the Week 3 assignment of the Application course. This application pulls weather temperature data from the National Weather Service's public API, stores the data, and provides a web front end where a user can query weather records. 
 
+![Build status](https://github.com/EnergizeStatistics/capstone-csca5028/actions/workflows/python-app.yml/badge.svg)
+
 ## Table of Contents
 
 - [Setting up](#setting-up)
