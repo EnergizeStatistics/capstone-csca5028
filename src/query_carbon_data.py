@@ -1,5 +1,7 @@
 import os
 
+import pandas as pd
+
 from src.bootstrap import app, statsd_client
 from flask import render_template, request, send_from_directory, jsonify
 from datetime import datetime
@@ -85,10 +87,10 @@ def render_report_asynchronously(task, report_id):
                 "from_dt": from_dt,
                 "to_dt": to_dt,
                 "state": "SUCCESS",
-                "mean_values": mean_values,
-                "median_values": median_values,
-                "variance_values": variance_values,
-                "std_deviation_values": std_deviation_values
+                "mean_values": 'NaN' if pd.isna(mean_values) else mean_values,
+                "median_values": 'NaN' if pd.isna(median_values) else median_values,
+                "variance_values": 'NaN' if pd.isna(variance_values) else variance_values,
+                "std_deviation_values": 'NaN' if pd.isna(std_deviation_values) else std_deviation_values
             },
             "rel": {
                 "self": "/report/{}".format(task.id)
