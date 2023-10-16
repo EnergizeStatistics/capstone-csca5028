@@ -58,7 +58,7 @@ class ICarbonIntensityApiClient(Protocol):
 class CarbonIntensityApiClient(ICarbonIntensityApiClient):
     def get_carbon_intensity_data(self) -> dict | None:
         start = time.time()
-        response = requests.get(f"https://api.carbonintensity.org.uk/intensity")
+        response = requests.get("https://api.carbonintensity.org.uk/intensity")
         millisecond_duration = int((time.time() - start) * 1000)
         statsd_client.timing("carbon_intensity_api_request", millisecond_duration)
         if response.status_code in {200}:

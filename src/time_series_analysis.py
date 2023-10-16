@@ -49,7 +49,6 @@ class CarbonIntensityAnalyzer:
 
         return df
 
-
     def calculate_statistics(self, df):
         # Calculate mean, median, variance, and standard deviation
         mean_values = df['intensity_actual'].mean()

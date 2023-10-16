@@ -15,6 +15,7 @@ def get_project_root() -> str:
         current_directory = os.path.dirname(current_directory)
     return None  # If no marker file is found, return None or raise an exception
 
+
 project_root = get_project_root()
 
 with open(os.path.join(project_root, 'config.json'), 'r') as config_file:

@@ -36,15 +36,15 @@ def create_report():
 def create_report_asynchronously(from_dt, to_dt):
     task = analyze.apply_async(args=[from_dt, to_dt])
     return jsonify({
-        "report":{
-            "attr":{
-                "id":task.id,
-                "from_dt":from_dt,
-                "to_dt":to_dt,
-                "state":"PENDING"
+        "report": {
+            "attr": {
+                "id": task.id,
+                "from_dt": from_dt,
+                "to_dt": to_dt,
+                "state": "PENDING"
             },
-            "rel":{
-                "self":"/report/{}".format(task.id)
+            "rel": {
+                "self": "/report/{}".format(task.id)
             }
         }
     }), 200
