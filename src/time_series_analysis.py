@@ -78,7 +78,7 @@ class CarbonIntensityAnalyzer:
 
         result = self.calculate_statistics(data_df)
         millisecond_duration = int((time.time() - start) * 1000)
-        statsd_client.timer("analyze", millisecond_duration)
+        statsd_client.timing("analyze", millisecond_duration)
         return result
 
 
