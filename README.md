@@ -125,13 +125,19 @@ The data source publishes new carbon intensity measurements every 30 minutes. Th
 
 You can enter the app via the abovementioned entry point, and then request a report by entering a time period on the web page. 
 
-Entering the time period is a bit tricky, as there are a time difference issue and a data availability issue. As an example, I am writing this README at 2023-10-17 11:15 AM MDT. At this moment, the measurement available is for the half-hour window from 2023-10-17 11:00 AM MDT to 2023-10-17 11:30 AM MDT. However, the source data is in the UTC time zone; this window translates to 2023-10-17 17:00 UTC to 2023-10-17 17:30 UTC. Then the time period you enter on the front end needs to cover this window: if you enter From 10/17/2023 04:00 PM (cannot be 4:01 PM, see the validation below) To 10/17/2023 06:00 PM, you will see a report. This report will include at least a mean and a median (when only one measurement has been retrieved), and a variance and a standard deviation when the application has been given enough time to pull more measurements. 
-
 The form validates your input: the time period entries need to be on the half hour or full hour (there is a prompt). I unfortunately have not found a way to limit the datetime dropdown to only show half/full hours. 
 
-To sum up, the quickest test you can perform is: start the system, immediately go to the front end, convert your current time to UTC time, enter a validated window that covers this UTC time, and click the "Submit" button. You will see a report that includes a mean and a median, whereas the variance and the standard deviation are NaN. 
+Entering the time period may seem tricky due to time differences and data availability. Let me give you an example:
 
-After you accumulate some data, you can test the application again, and the variance and the standard deviation will have non-missing values. 
+I'm writing this README on 2023-10-17 at 11:15 AM MDT. At this moment, the available measurement corresponds to the half-hour window from 11:00 AM to 11:30 AM MDT on 2023-10-17. However, the source data is in UTC time, which means this window corresponds to 2023-10-17 17:00 to 17:30 UTC.
+
+Instructions:
+
+Choose a Time Window: To get a report, your selected time period needs to cover this window. For example, if you enter "From 10/17/2023 04:00 PM" (please ensure it's exactly 4:00 PM, see the validation above) "To 10/17/2023 06:00 PM," you will receive a report.
+
+Report Contents: This report will include at least the mean and median (when only one measurement is available), with the variance and standard deviation showing as NaN. If the application has enough time to gather more measurements, it will also include the variance and standard deviation.
+
+In summary, make sure your selected time period aligns with the measurement window, and you'll receive a report with relevant statistics.
 
 ## Design documentation
 
