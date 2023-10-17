@@ -81,12 +81,10 @@ If the build finishes successfully on GitHub, we move forward to trying it out o
 
 From the Deploy tab, manually deploy using the main branch.
 
-From the Resources tab, verify that all Heroku dynos are enabled.
-
 At this point, even if the steps above are successful, I still personally find it worthwhile to check the log for all 3 Heroku dynos, in order to make sure there are no obvious problems at startup. 
 
 ## Checkpoint
-At this point, the application is up and running. An end user (see the Usage section below) is actually able to request a data analysis by now. But we will set up the monitoring services before we move forward operating the application as an end user. 
+At this point, the application is up and running. An end user (see the Usage section below) is actually able to request a data analysis by now. But we will set up the monitoring services before we move forward to that part. 
 
 ## Metrics
 
