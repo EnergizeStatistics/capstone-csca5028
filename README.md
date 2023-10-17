@@ -5,7 +5,7 @@ This project is the capstone assignment of the Application course. This applicat
 
 1. pulls carbon intensity data from a public API,
 1. stores the data in a database,
-1. provides a web front end where a user can request a report of the data,
+1. provides a web front end where a user can request an analysis of the data,
 1. performs said analysis asynchronously,
 1. presents the results to the user.
 
