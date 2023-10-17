@@ -47,6 +47,10 @@ The end result looks like this:
 This project was gradually developed - deployment was first local, and later deployment to Heroku was added. The instructions below are for the Heroku deployment. However, some files and dependencies that are only required for local deployment are still present in the repository.
 
 1. Fork [this repository](https://github.com/EnergizeStatistics/capstone-csca5028) to your own GitHub account.
+1. Trust our build action as shown here:
+![trust](documentation/assets/trust-workflows.png)
+1. Run the build action once to nudge GitHub into finding it. It'll take a minute or so to complete:
+![run](documentation/assets/run-workflow.png)
 1. Configure your main branch as shown in the image below:
 ![branch setup](documentation/assets/Github%20Branch%20Setup.png)
 1. Link your fork to your own Heroku account. There are many guides available online. I used https://medium.com/featurepreneur/how-to-connect-github-to-heroku-be6ff27419d3
