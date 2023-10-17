@@ -17,8 +17,8 @@ The end result looks like this:
 - [Rubric coverage](#rubric-coverage)
 - [Note](#note)
 - [Setup](#setup)
-   - [Installation](#installation)
-   - [Building](#building)
+    - [Installation](#installation)
+    - [Building](#building)
 - [Metrics](#metrics)
 - [Usage](#usage)
 - [Design documentation](#design-documentation)
@@ -94,7 +94,7 @@ We provide custom StatsD metrics for [the responsiveness of the carbon intensity
 
 ### JawsDB
 
-JawsDB provides just basic service health information. You can get here by clicking "JawsDB MySQL" in the Heroku's resources tab:
+JawsDB provides just basic service health information. You can get here by clicking "JawsDB MySQL" in the Heroku's Resources tab:
 
 ![jawsdb](documentation/assets/jawsdb%20mysql%20dashboard.png)
 
@@ -112,7 +112,7 @@ Graphite is where you can find our custom metrics, our standard StatsD metrics, 
 
 You can find these from: Heroku dashboard -> Resources tab -> Add-ons -> Hosted Graphite -> Dashboards -> Graphite
 
-Since some of these are custom metrics, they won't be on any dashboard by default, and you'll need to add them individually. The easiest way to do this I find is to enable a visual interface by selecting Dashboard -> Configure UI -> Navigation Mode -> Tree (left nav).  Extend the tree on the left and click metrics to add them to the dashboard. See the below screenshot for some likely relevant metrics.
+Since some of these are custom metrics, they won't be on any dashboard by default, and you'll need to add them individually. The easiest way to do this is to enable a visual interface by selecting Dashboard -> Configure UI -> Navigation Mode -> Tree (left nav). Extend the tree on the left and click metrics to add them to the dashboard. See the below screenshot for some likely relevant metrics.
 
 To help make the data more apparent, I suggest zooming into a small window of time (2h or so) and perhaps choosing area charts since the dots are so scarce that they can be easy to overlook otherwise.
 
@@ -141,7 +141,7 @@ The user and the four controls exchange data through a series of barriers. In so
 
 ![Sequence Diagram](documentation/assets/cs5028%20capstone%20sequence.png)
 
-Please forgive the few omitted activation windows - we were hitting the limits of the free plan for the UML tool.
+Please forgive the few omitted activation windows - I was hitting the limits of the free plan for the UML tool.
 
 ## Internal API documentation
 
