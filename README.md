@@ -28,11 +28,11 @@ The end result looks like this:
 
 ## Rubric coverage
 - **Web application basic form, reporting**: The web application provides a form where the user can enter a time period and request a statistical analysis of the data collected during that time period. The web application also provides a page where the user can view the results of the analysis.
-- **Data collection**: The web application collects data from a public API that provides carbon intensity measurements.
+- **Data collection**: The web application collects data from a public REST API that provides carbon intensity measurements.
 - **Data analyzer**: Per user request, the web application provides summary statistics of the data collected.
 - **Unit tests**: Unit tests are included in the `tests/test_fetch_data.py` file.
 - **Data persistence, any data store**: The web application stores the data collected in a MySQL database.
-- **Rest collaboration internal or API endpoint**: The web application uses an internal REST API to request and retrieve reports. Additionally, the data collection component of the system pulls carbon intensity measurements from a public REST API.
+- **Rest collaboration internal or API endpoint**: The web application uses an internal REST API to request and retrieve reports. 
 - **Product environment**: The web application is deployed on Heroku.
 - **Integration tests**: Integration tests are also included in the `tests/test_fetch_data.py` file. Refer to the `test_collect_integrated` function.
 - **Using mock objects or any test doubles**: The `test_collect_and_store_fake_data` function in the `tests/test_fetch_data.py` script contains a canned answer to the calls made to the public API. There are various kinds of test doubles; according to this [blog entry of Martin Fowler's](https://martinfowler.com/bliki/TestDouble.html), this type of test double is called a "stub".
