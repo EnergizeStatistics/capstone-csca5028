@@ -107,6 +107,16 @@ Since some of these are custom metrics, they won't be on any dashboard by defaul
 
 The app presents as a single page web application. The user can enter a time period and request a statistical analysis of the data pertaining to that time period. The results are presented to the user when the report is ready.
 
+## Design documentation
+
+The below sequence diagram depicts our four applications as *controls*. Three of those are our heroku dynos, with the fourth being a javascript application running on the user's browser.
+
+The user and the four controls exchange data through a series of barriers. In some cases, the data exchange is through RESTful APIs.
+
+![Sequence Diagram](documentation/assets/cs5028%20capstone%20sequence.png)
+
+Please forgive the few omitted activation windows -- we were hitting the limits of the free plan for the UML generaton tool.
+
 ## Internal API documentation
 
 The only resource is the `/report` resource.
