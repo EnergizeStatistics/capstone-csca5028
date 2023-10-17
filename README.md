@@ -93,17 +93,28 @@ Once you have accumulated a reasonable amount of data, click `Open App` and ente
 
 We provide custom StatsD metrics for [the responsiveness of the carbon intensity API we're polling](https://github.com/EnergizeStatistics/capstone-csca5028/blob/854bbe43f44c258028d5d52373fbc57077d33fcc/src/fetch_data.py#L60-L63), for [our own statistical calculations](https://github.com/EnergizeStatistics/capstone-csca5028/blob/cbb64f58b7ce0262a1917f48981da6491ace58ec/src/time_series_analysis.py#L79-L81), as well as general usage statistics. Flask also provides some standard StatsD metrics. Each of the add-on services has its own built-in metrics. This section aims to help you find all of these.
 
-JawsDB provides just basic service health information:
+### JawsDB
+
+JawsDB provides just basic service health information. You can get here by clicking "JawsDB MySQL" in the Heroku's resources tab:
 
 ![jawsdb](documentation/assets/jawsdb%20mysql%20dashboard.png)
 
-The RabbitMQ add-on has a management interface that shows metrics. The most informative stats about our Celery queue can be found under Queues and Streams:
+### RabbitMQ
+RabbitMQ metrics are offered by the CloudAMQP add-on: Heroku dashboard -> Resources tab -> Add-ons -> CloudAMQP -> RabbitMQ Manager (big green button).
+
+The most informative stats about our Celery queue can be found by navigating even further: Queues and Streams -> celery (find it in the table).
+
+You of course won't see much data if you haven't performed much activity, and you may need to adjust the window from the default of "Last minute."
 
 ![Rabbit MQ dashboard](documentation/assets/Rabbit%20MQ%20dashboard.png)
 
 Graphite is where you can find our custom metrics, our standard StatsD metrics, and also Graphite's own metrics.
 
-Since some of these are custom metrics, they won't be on any dashboard by default, and you'll need to drag them from the tree to create a graph. To help make the data more apparent, I suggest zooming into a small window of time (2h or so) and perhaps choosing area charts since the dots are so scarce that they can be easy to overlook otherwise.
+You can find these from: Heroku dashboard -> Resources tab -> Add-ons -> Hosted Graphite -> Dashboards -> Graphite
+
+Since some of these are custom metrics, they won't be on any dashboard by default, and you'll need to add them individually. The easiest way to do this I find is to enable a visual interface by selecting Dashboard -> Configure UI -> Navigation Mode -> Tree (left nav).  Extend the tree on the left and click metrics to add them to the dashboard. See the below screenshot for some likely relevant metrics.
+
+To help make the data more apparent, I suggest zooming into a small window of time (2h or so) and perhaps choosing area charts since the dots are so scarce that they can be easy to overlook otherwise.
 
 ![Graphite metrics](documentation/assets/Graphite%20metrics.png)
 
