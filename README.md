@@ -1,154 +1,204 @@
 # Carbon Intensity Data Collection
 ![Build status](https://github.com/EnergizeStatistics/capstone-csca5028/actions/workflows/python-app.yml/badge.svg)
 
-This project is the capstone assignment of csca5028. This application: 
+This project is the capstone assignment of the Application course. This application: 
 
-1. pulls carbon impact data from a public API,
+1. pulls carbon intensity data from a public API,
 1. stores the data in a database,
-1. provides a web front end where a user can request statsitical analysis of subsets of the data,
-1. performs said analysis asyncronously, and
+1. provides a web front end where a user can request a statistical analysis of subsets (based on date and time) of the data-,
+1. performs said analysis asynchronously, and eventually
 1. presents the results to the user.
 
 The end result looks like this:
 
-![app demo](/documentation/assets/App%20demo.png)
-
+![app demo](documentation/assets/App%20demo.png)
 
 ## Table of Contents
-
+- [Rubric coverage](#rubric-coverage)
 - [Setting up](#setting-up)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+ - [Prerequisites](#prerequisites)
+ - [Installation](#installation)
 - [File explanations](#file-explanations)
 - [Usage](#usage)
-  - [Data collection and storage](#data-collection-and-storage)
-  - [Data analysis](#data-analysis)
+ - [Data collection and storage](#data-collection-and-storage)
+ - [Data analysis](#data-analysis)
 - [Data source](#data-source)
 - [Side note](#side-note)
 
+## Rubric coverage
+- **Web application basic form, reporting**: The web application provides a form where the user can enter a time period and request a statistical analysis of the data collected during that time period. The web application also provides a page where the user can view the results of the analysis.
+- **Data collection**: The web application collects data from a public API that provides carbon intensity measurements.
+- **Data analyzer**: The web application provides summary statistics of the data collected.
+- **Unit tests**: Unit tests are included in the `tests/test_fetch_data.py` file.
+- **Data persistence, any data store**: The web application stores the data collected in a MySQL database.
+- **Rest collaboration internal or API endpoint**: The web application uses a REST API to request and retrieve reports. Additionally, the data collection component of the system pulls carbon intensity measurements from a public REST API.
+- **Product environment**: The web application is deployed on Heroku.
+- **Integration tests**: Integration tests are also included in the `tests/test_fetch_data.py` file. Refer to the `test_collect_integrated` function.
+- **Using mock objects or any test doubles**: The `test_collect_and_store_fake_data` function in the `tests/test_fetch_data.py` script contains a canned answer to the calls made to the public API. There are various kinds of test doubles; according to this [blog entry of Martin Fowler's](https://martinfowler.com/bliki/TestDouble.html), this type of test double is called a "stub".
+- **Continuous integration**: The project uses GitHub Actions for continuous integration. The workflow is defined in the `.github/workflows/python-app.yml` file.
+- **Production monitoring instrumenting**: The project is instrumented with StatsD and uses Graphite to monitor the application. Refer to the Metrics section in this README for details. 
+- **Event collaboration messaging**: The web application uses RabbitMQ and Celery to exchange messages with the data analysis component of the system.
+- **Continuous delivery**: The project uses Heroku for continuous delivery.  
+
 ## Setting up 
 
-The setup for this project is rather involved. It can be installed locally or it can be deployed to heroku. Depending on which you choose, how you setup the dependent services will change quite a bit.
+### Installation
 
-### Local Installation
+This project was gradually developed - deployment was first local, and later deployment to Heroku was added. The instructions below are for the Heroku deployment. However, some files and dependencies that are only required for local deployment are still present in the repository even after Heroku deployment was added.
 
-This project was locally developed on a virtual machine running Ubuntu 22.04.3 LTS.  Supposing your environment is similar,
-
-#### Bring in dependencies
-
-1. clone this repository.
-1. install bash or a bash-compatible shell if you don't have one already.
-1. in that shell, change directory to the root directory of this repository.
-1. from there, run `sudo ./release/apt-get.sh` to install various packages.
-1. then, run `sudo ./release/docker.sh' to get docker
-1. then, run `sudo ./release/python.sh` to get python (3.10.12)
-1. then, run `sudo ./release/rabbitmq.sh` to get and start a rabbit mq docker container. If your container stops (say, after a reboot), you may rerun this command to restart your container.
-1. enter the python virtual environment with `python3 -m venv venv && source venv/bin/activate`
-1. install python requirments with `pip install -r requirements.txt`
-
-#### Start the services
-
-1. Optionally, open a terminal tab and attach to your rabbitmq server if you'd like to monitor it.
-1. document setup of our local statsd / graphite docker container.
-1. open a terminal tab and enter the python virtual environment.  Start the service which pulls data from the public carbon insights API with this command: `PYTHONPATH="${PYTHONPATH}:$(pwd)" venv/bin/python src/scheduler.py`
-1. open another terminal tab and again enter the python virtual environment.  Start the service which performs statistical analysis of carbon data with this command: `PYTHONPATH="${PYTHONPATH}:$(pwd)" venv/bin/python src/time_series_analysis.py`
-1. open a third terminal tab and enter the python virtual environment. Start the web server with the following command: `PYTHONPATH="${PYTHONPATH}:$(pwd)" venv/bin/python src/query_carbon_data.py` By default, it will listen on port 5000, though you can specify another port with the PORT environment variable.
-
-Note that although the heroku-hosted installation instructions include setting up a mysql component, we don't have an analogous step here.  Instead, when running locally we use sqlite.
-
-### Heroku & hosted services installation
-
-This project has requirements for a product environment, monitoring, CI, etc. To demonstrate these, a local setup won't cut it. Let's get to it:
-
-1. clone this repository to your own github account.
-1. configure your branches thus:
-![branch setup](/documentation/assets/Github%20Branch%20Setup.png)
-1. link it to your own heroku account TODO: document this process.
-1. under the resources tab in heroku, add the 3 add-ons you see here:
-![heroku resources](/documentation/assets/heroku%20resources.png)
-1. For the hosted graphite add-on, enter its management interface and find the StatsD add-on for it.  Yes, we're grabbing an add-on for an add-on.
-![its add-ons all the way down](/documentation/assets/Hosted%20StatsD%20addon.png)
-1. While you're there, take note of the URL and API key shown to you on that page.
-1. head to the settings page on heroku and display the config vars. Most of these will be populated for you by the addons, but you'll need to add the statsd configuration variables.
-![heroku config vars](/documentation/assets/heroku%20config%20vars.png)
-1. the last piece of heroku configuration we do is the heroku deployment page. You can see what these settings will be now, but probably you don't want to set these up until you've succeeded with a manual deployment.
-![heroku deploy](/documentation/assets/heroku%20deploy.png)
+1. Fork this repository to your own GitHub account.
+1. Configure your main branch as shown in the image below:
+![branch setup](documentation/assets/Github%20Branch%20Setup.png)
+1. Link your fork to your own Heroku account. There are many guides available online. I used https://medium.com/featurepreneur/how-to-connect-github-to-heroku-be6ff27419d3
+1. Under the Resources tab in Heroku dashboard, add these 3 add-ons:
+![heroku resources](documentation/assets/heroku%20resources.png)
+1. For the hosted Graphite add-on, enter its management interface and find the StatsD add-on for it. Add that as well. Take note of the URL and API key.
+![its add-ons all the way down](documentation/assets/Hosted%20StatsD%20addon.png)
+1. Configure the configuration variables of StatsD in Heroku's settings page -> config vars. Most of these config vars will be automatically populated by the addons, but you need to add the StatsD configuration variables.
+![heroku config vars](documentation/assets/heroku%20config%20vars.png)
+1. Under the Deploy tab in Heroku dashboard, we can see what these settings are at this point. Come back to these settings after you have succeeded with a manual deployment.
+![heroku deploy](documentation/assets/heroku%20deploy.png)
 
 ### Build
 
-During branch setup, you saw that we have a build process setup in github actions. If you make a pull request against main, you'll see that run. However, it'd be good to test that it's building for you before you make any changes. You can manually run the build process like so:
+We have a build process that depends on GitHub Actions. If you make a pull request against the main branch, it will run. To test that our process is building in your setup before you make any further changes, you can manually run the build process like so:
 
-![manual build](/documentation/assets/Run%20github%20workflow.png)
+![manual build](documentation/assets/Run%20github%20workflow.png)
 
-Incidentally, you can find included in the output of that build the results of the unit and integration tests.
+Incidentally, the results of the unit and integration tests are included in the results of a build.
 
-![Github build output](/documentation/assets/Github%20build%20output.png)
+![Github build output](documentation/assets/Github%20build%20output.png)
 
-Supposing that works well, it's worth trying it out on heroku.  From the deployment tab, manually deploy main.
+If the build finishes successfully on GitHub, we move forward to trying it out on Heroku.
 
-From the resources tab, verify that all of the dynos are enabled.
+From the Deploy tab, manually deploy using the main branch.
 
-Even supposing that succeeds, it's worth glancing at the logs for all 3 heroku dynos to make sure there are no obvious problems at startup.
+From the Resources tab, verify that all Heroku dynos are enabled.
+
+At this point, even if the steps above are successful, I still personally find it worthwhile to check the log for all 3 Heroku dynos, in order to make sure there are no obvious problems at startup. 
 
 ### Test
 
-To start with, peek at the logs for the api_polling_worker dyno. There will be no data to look at until that's written at least once.
+The first step is to check the log for the `api_polling_worker` dyno. There ought to be no data, till that has written at least once.
 
-Note that the polling worker is only pulling the most recently available data, so you won't have much history to query.  Also note that "most recently available" will be recent, but it may not be completely current.
+Note that the pulling worker only pulls the most recently available data, so you won't have much history to query.
 
-Once you have a bit of data, click `Open App` and enter a time period to analyze. Time periods need to be on the half-hour for the form to validate (as this is the granularity of the measurements that were taken) and obviously you need to include the time during which data was collected.
+Once you have accumulated a reasonable amount of data, click `Open App` and enter a time period to analyze. Time periods need to be on the half-hour for the form to validate (as this is the granularity of the carbon intensity measurements). And obviously you need to include the time during which data was collected in your window.
 
 ## Metrics
 
-We push custom statsd metrics for the responsiveness of the carbon intensity api we're polling, for our own statistical calculations, as well as general usage statistics. Flask also pushes some standard statsd metrics. Each of the add-on services of course have their own built-in metrics. This section aims to help you find all of these. (Heroku and Github provide metrics as well, but I assume you already know how to find those at this point in the course.)
+We provide custom StatsD metrics for [the responsiveness of the carbon intensity API we're polling](https://github.com/EnergizeStatistics/capstone-csca5028/blob/854bbe43f44c258028d5d52373fbc57077d33fcc/src/fetch_data.py#L60-L63), for [our own statistical calculations](https://github.com/EnergizeStatistics/capstone-csca5028/blob/cbb64f58b7ce0262a1917f48981da6491ace58ec/src/time_series_analysis.py#L79-L81), as well as general usage statistics. Flask also provides some standard StatsD metrics. Each of the add-on services has its own built-in metrics. This section aims to help you find all of these.
 
 JawsDB provides just basic service health information:
 
-![jawsdb](/documentation/assets/jawsdb%20mysql%20dashboard.png)
+![jawsdb](documentation/assets/jawsdb%20mysql%20dashboard.png)
 
-The RabbitMQ add-on has a management interface showing metrics including (most interestingly for our project) stats about our celery queue:
+The RabbitMQ add-on has a management interface that shows metrics. The most informative stats about our Celery queue can be found under Queues and Streams:
 
-![Rabbit MQ dashboard](/documentation/assets/Rabbit%20MQ%20dashboard.png)
+![Rabbit MQ dashboard](documentation/assets/Rabbit%20MQ%20dashboard.png)
 
-For locally run Rabbit MQ, stats are kept in the docker container. You'd need to expose the port, login, and view the metrics.  
+Graphite is where you can find our custom metrics, our standard StatsD metrics, and also Graphite's own metrics.
 
-Graphite is where you can find our custom metrics, our standard stats d metrics, and also graphite's own metrics.
+Since some of these are custom metrics, they won't be on any dashboard by default, and you'll need to drag them from the tree to create a graph. To help make the data more apparent, I suggest zooming into a small window of time (2h or so) and perhaps choosing area charts since the dots are so scarce that they can be easy to overlook otherwise.
 
-Since some of these are custom metrics, they won't be on a dashboard by default and you'll need to drag them from the tree to create a graph. To help make the data more apparent, I suggest zooming into a small window of time (2h or so) and perhaps choosing area charts since the dots are so scarce that they can be easy to overlook otherwise.
+![Graphite metrics](documentation/assets/Graphite%20metrics.png)
 
-![Graphite metrics](/documentation/assets/Graphite%20metrics.png)
+## Usage
 
-Graphite's dashboard is pretty much the same for the local environment as it is with the hosted deployment, though of course you'll access it at a local url and at a port mapped to the docker container.
+The app presents as a single page web application. The user can enter a time period and request a statistical analysis of the data pertaining to that time period. The results are presented to the user when the report is ready.
 
 ## Internal API documentation
 
+The only resource is the `/report` resource.
+
+`GET /report/<id>`
+- returns a json object of the form:
+```
+"report": {
+    "attr": {
+        "id": string,
+        "from_dt": string,
+        "to_dt": string,
+        "state": "PENDING"|"SUCCESS"|"FAILURE",
+        "mean_values": 'NaN' | number,
+        "median_values": 'NaN' | number,
+        "variance_values": 'NaN' | number,
+        "std_deviation_values": 'NaN' | number,
+    },
+    "rel": {
+        "self": string (url)
+    }
+}
+```
+
+Note that some fields may be omitted depending on the state of the report.
+
+`POST /report` 
+- expects `from_datetime_str` and `to_datetime_str`, both in `%Y-%m-%dT%H:%M` format.
+- returns a json object of the same form as the GET request.
+
+
 ## File explanations
-
-### todo!
-
-### `config.json`
-
-- **Description:** This file stores project configuration settings, such as how often to poll the carbon intensity API.
 
 ### `database/`
 
-- **Description:** This directory holds the database used by the project when run locally. It is not used when deployed on heroku. 
+- This directory holds the database used by the project when run locally. It is not used when deployed on heroku. 
 
-### `templates/`
+### `release/`
 
-- **Description:** This directory stores the html templates required by the front end. index.html is the only file typically used, as further communication between the browser and the web server happen through an REST api. However, should javascript be unavailable, the project degrades to using the other html template files.
+- This directory stores the scripts used to build a local release of the project. It is not used when deployed on heroku. `release-local.sh` simply invokes these scripts in a suitable sequence.
+
+### `src/`
+
+- This directory stores the source code of the project. Of particular interest are:
+- `src/fetch_data.py`
+- - This script contains the main function that pulls data from the carbon intensity API and stores it in the database. It is regularly invoked by the `src/scheduler.py` script.
+- `src/query_carbon_data.py`
+- - This script runs a web server that provides the front end for the user to request statistical analysis of the data.
+- `src/time_series_analysis.py`
+- - This script contains the main function that performs statistical analysis on the data. It is invoked by the celery worker.
+
+### `src/templates/`
+
+- This directory stores the html templates required by the front end. `index.html` is the only file typically used, as further communication between the browser and the web server happen through an REST api.
+
+### `src/assets/`
+
+- This directory stores the css and javascript files which power the front end.
+
+### `venv/`
+
+- This directory stores the virtual python environment used by the project.
+
+### `tests/`
+
+- This directory stores pytest unit and integration tests for the project.
+
+### `config.json`
+
+- This file stores project configuration settings, such as how often to poll the carbon intensity API.
+
+### `Procfile`
+
+- This file is used by Heroku to start the web server and other dynos.
+
+### `release.sh`
+
+- This file is used by Heroku to build a release of the project.
+
+### `runtime.txt`
+
+- This file is used by Heroku to specify the python version to use.
 
 ### `requirements.txt`
 
-- **Description:** The `requirements.txt` file lists all the project dependencies required to run the code.
+- This file is used by Heroku to specify the python dependencies of the project.
 
-### `.project_root_marker`
+### `build_apt-get.sh`, `build_requirements.sh`, `build_runtime.sh`
 
-- **Description:** This file is used by one of the helper functions to locate the project root. 
-
+- These files are used to generate lists of dependencies of the project. For example, `build_requirements.sh` generates a list of python dependencies.
 
 ## Data source
 Carbon intensity data is provided by https://carbon-intensity.github.io/api-definitions/#get-intensity
 
-## Side note
-Please remember that you're likely testing on mostly free-tier resources, so don't spam requests to aggressively.
+
