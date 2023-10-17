@@ -1,12 +1,12 @@
-# Carbon Intensity Data Collection
+# Carbon Intensity Data Reporting System
 ![Build status](https://github.com/EnergizeStatistics/capstone-csca5028/actions/workflows/python-app.yml/badge.svg)
 
 This project is the capstone assignment of the Application course. This application: 
 
 1. pulls carbon intensity data from a public API,
 1. stores the data in a database,
-1. provides a web front end where a user can request a statistical analysis of subsets (based on date and time) of the data-,
-1. performs said analysis asynchronously, and eventually
+1. provides a web front end where a user can request a report of the data,
+1. performs said analysis asynchronously,
 1. presents the results to the user.
 
 The end result looks like this:
@@ -15,36 +15,36 @@ The end result looks like this:
 
 ## Table of Contents
 - [Rubric coverage](#rubric-coverage)
-- [Setting up](#setting-up)
- - [Prerequisites](#prerequisites)
+- [Setup](#setup)
  - [Installation](#installation)
-- [File explanations](#file-explanations)
+ - [Building](#building)
+ - [Testing](#testing)
+- [Metrics](#metrics)
 - [Usage](#usage)
- - [Data collection and storage](#data-collection-and-storage)
- - [Data analysis](#data-analysis)
+- [Internal API documentation](#internal-api-documentation)
+- [File explanations](#file-explanations)
 - [Data source](#data-source)
-- [Side note](#side-note)
 
 ## Rubric coverage
 - **Web application basic form, reporting**: The web application provides a form where the user can enter a time period and request a statistical analysis of the data collected during that time period. The web application also provides a page where the user can view the results of the analysis.
 - **Data collection**: The web application collects data from a public API that provides carbon intensity measurements.
-- **Data analyzer**: The web application provides summary statistics of the data collected.
+- **Data analyzer**: Per user request, the web application provides summary statistics of the data collected.
 - **Unit tests**: Unit tests are included in the `tests/test_fetch_data.py` file.
 - **Data persistence, any data store**: The web application stores the data collected in a MySQL database.
-- **Rest collaboration internal or API endpoint**: The web application uses a REST API to request and retrieve reports. Additionally, the data collection component of the system pulls carbon intensity measurements from a public REST API.
+- **Rest collaboration internal or API endpoint**: The web application uses an internal REST API to request and retrieve reports. Additionally, the data collection component of the system pulls carbon intensity measurements from a public REST API.
 - **Product environment**: The web application is deployed on Heroku.
 - **Integration tests**: Integration tests are also included in the `tests/test_fetch_data.py` file. Refer to the `test_collect_integrated` function.
 - **Using mock objects or any test doubles**: The `test_collect_and_store_fake_data` function in the `tests/test_fetch_data.py` script contains a canned answer to the calls made to the public API. There are various kinds of test doubles; according to this [blog entry of Martin Fowler's](https://martinfowler.com/bliki/TestDouble.html), this type of test double is called a "stub".
 - **Continuous integration**: The project uses GitHub Actions for continuous integration. The workflow is defined in the `.github/workflows/python-app.yml` file.
 - **Production monitoring instrumenting**: The project is instrumented with StatsD and uses Graphite to monitor the application. Refer to the Metrics section in this README for details. 
 - **Event collaboration messaging**: The web application uses RabbitMQ and Celery to exchange messages with the data analysis component of the system.
-- **Continuous delivery**: The project uses Heroku for continuous delivery.  
+- **Continuous delivery**: The project uses Heroku for continuous delivery.
 
-## Setting up 
+## Setup 
 
 ### Installation
 
-This project was gradually developed - deployment was first local, and later deployment to Heroku was added. The instructions below are for the Heroku deployment. However, some files and dependencies that are only required for local deployment are still present in the repository even after Heroku deployment was added.
+This project was gradually developed - deployment was first local, and later deployment to Heroku was added. The instructions below are for the Heroku deployment. However, some files and dependencies that are only required for local deployment are still present in the repository.
 
 1. Fork this repository to your own GitHub account.
 1. Configure your main branch as shown in the image below:
@@ -59,7 +59,7 @@ This project was gradually developed - deployment was first local, and later dep
 1. Under the Deploy tab in Heroku dashboard, we can see what these settings are at this point. Come back to these settings after you have succeeded with a manual deployment.
 ![heroku deploy](documentation/assets/heroku%20deploy.png)
 
-### Build
+### Building
 
 We have a build process that depends on GitHub Actions. If you make a pull request against the main branch, it will run. To test that our process is building in your setup before you make any further changes, you can manually run the build process like so:
 
@@ -77,13 +77,13 @@ From the Resources tab, verify that all Heroku dynos are enabled.
 
 At this point, even if the steps above are successful, I still personally find it worthwhile to check the log for all 3 Heroku dynos, in order to make sure there are no obvious problems at startup. 
 
-### Test
+### Testing
 
 The first step is to check the log for the `api_polling_worker` dyno. There ought to be no data, till that has written at least once.
 
 Note that the pulling worker only pulls the most recently available data, so you won't have much history to query.
 
-Once you have accumulated a reasonable amount of data, click `Open App` and enter a time period to analyze. Time periods need to be on the half-hour for the form to validate (as this is the granularity of the carbon intensity measurements). And obviously you need to include the time during which data was collected in your window.
+Once you have accumulated a reasonable amount of data, click `Open App` and enter a time period to analyze. Time periods need to be on the half-hour for the form to validate (as this is the granularity of the carbon intensity measurements). And obviously you need to include your time window during which data was collected.
 
 ## Metrics
 
@@ -105,7 +105,7 @@ Since some of these are custom metrics, they won't be on any dashboard by defaul
 
 ## Usage
 
-The app presents as a single page web application. The user can enter a time period and request a statistical analysis of the data pertaining to that time period. The results are presented to the user when the report is ready.
+From the end user's perspective, the app presents as a single page web application. The user can enter a time period and request a statistical analysis of the data pertaining to that time period. The results are presented to the user when the report is ready.
 
 ## Design documentation
 
@@ -160,9 +160,9 @@ Note that some fields may be omitted depending on the state of the report.
 
 ### `src/`
 
-- This directory stores the source code of the project. Of particular interest are:
+- This directory stores the source code of the project. These scripts below are of particular interest.
 - `src/fetch_data.py`
-- - This script contains the main function that pulls data from the carbon intensity API and stores it in the database. It is regularly invoked by the `src/scheduler.py` script.
+- - This script contains the main function that pulls data from the carbon intensity public API and stores it in the database. It is regularly invoked by the `src/scheduler.py` script.
 - `src/query_carbon_data.py`
 - - This script runs a web server that provides the front end for the user to request statistical analysis of the data.
 - `src/time_series_analysis.py`
@@ -170,7 +170,7 @@ Note that some fields may be omitted depending on the state of the report.
 
 ### `src/templates/`
 
-- This directory stores the html templates required by the front end. `index.html` is the only file typically used, as further communication between the browser and the web server happen through an REST api.
+- This directory stores the html templates required by the front end. `index.html` is the only file typically used, as further communication between the browser and the web server happens through an REST api.
 
 ### `src/assets/`
 
@@ -198,11 +198,11 @@ Note that some fields may be omitted depending on the state of the report.
 
 ### `runtime.txt`
 
-- This file is used by Heroku to specify the python version to use.
+- We specify the python interpreter version that we want Heroku to use.
 
 ### `requirements.txt`
 
-- This file is used by Heroku to specify the python dependencies of the project.
+- We specify the python dependencies of the project. Heroku installs these libraries.
 
 ### `build_apt-get.sh`, `build_requirements.sh`, `build_runtime.sh`
 
