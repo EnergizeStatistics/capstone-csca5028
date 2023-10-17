@@ -42,7 +42,7 @@ The end result looks like this:
 - **Continuous delivery**: The project uses Heroku for continuous delivery.
 
 ## Note
-This README walks you through setting up this application as if you acquired the source code from me and were operating as a system admin to install it. I host the front end of this app at [https://capstone-csca5028-d584749b4b71.herokuapp.com/](https://capstone-csca5028-d584749b4b71.herokuapp.com/) if you would like to see the final product. 
+This README walks you through setting up this application as if you acquired the source code from me and were operating as a system admin to install it. I host this app at [https://capstone-csca5028-d584749b4b71.herokuapp.com/](https://capstone-csca5028-d584749b4b71.herokuapp.com/) if you would like to see the final product. 
 
 ## Setup 
 
