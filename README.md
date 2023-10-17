@@ -177,15 +177,15 @@ Note that some fields may be omitted depending on the state of the report.
 
 ## File explanations
 
-### `database/`
+**`database/`**
 
 - This directory holds the database used by the project when run locally. It is not used when deployed on heroku. 
 
-### `release/`
+**`release/`**
 
 - This directory stores the scripts used to build a local release of the project. It is not used when deployed on heroku. `release-local.sh` simply invokes these scripts in a suitable sequence.
 
-### `src/`
+**`src/`**
 
 - This directory stores the source code of the project. These scripts below are of particular interest.
 - `src/fetch_data.py`
@@ -195,43 +195,43 @@ Note that some fields may be omitted depending on the state of the report.
 - `src/time_series_analysis.py`
 - - This script contains the main function that performs statistical analysis on the data. It is invoked by the celery worker.
 
-### `src/templates/`
+**`src/templates/`**
 
 - This directory stores the html templates required by the front end. `index.html` is the only file typically used, as further communication between the browser and the web server happens through an REST api.
 
-### `src/assets/`
+**`src/assets/`**
 
 - This directory stores the css and javascript files which power the front end.
 
-### `venv/`
+**`venv/`**
 
 - This directory stores the virtual python environment used by the project.
 
-### `tests/`
+**`tests/`**
 
 - This directory stores pytest unit and integration tests for the project.
 
-### `config.json`
+**`config.json`**
 
 - This file stores project configuration settings, such as how often to poll the carbon intensity API.
 
-### `Procfile`
+**`Procfile`**
 
 - This file is used by Heroku to start the web server and other dynos.
 
-### `release.sh`
+**`release.sh`**
 
 - This file is used by Heroku to build a release of the project.
 
-### `runtime.txt`
+**`runtime.txt`**
 
 - We specify the python interpreter version that we want Heroku to use.
 
-### `requirements.txt`
+**`requirements.txt`**
 
 - We specify the python dependencies of the project. Heroku installs these libraries.
 
-### `build_apt-get.sh`, `build_requirements.sh`, `build_runtime.sh`
+**`build_apt-get.sh`, `build_requirements.sh`, `build_runtime.sh`**
 
 - These files are used to generate lists of dependencies of the project. For example, `build_requirements.sh` generates a list of python dependencies.
 
