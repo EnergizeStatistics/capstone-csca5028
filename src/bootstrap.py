@@ -33,7 +33,7 @@ db = SQLAlchemy(app)
 statsd_client = statsd.StatsClient(
         os.environ.get('STATSD_HOST') or 'localhost',
         os.environ.get('STATSD_PORT') or 8125,
-        prefix=os.environ.get('GRAPHITE_API_KEY') or 'carbon_intensity'
+        prefix=os.environ.get('HOSTEDGRAPHITE_APIKEY') or 'carbon_intensity'
 )
 
 config['celery']['broker_url'] = os.environ.get('CLOUDAMQP_URL') or config['celery']['broker_url']
