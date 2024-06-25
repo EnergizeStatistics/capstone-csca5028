@@ -147,8 +147,6 @@ The user and the four controls exchange data through a series of barriers. In so
 
 ![Sequence Diagram](documentation/assets/csca5028%20week%201%20capstone%20sequence.png)
 
-Please forgive the few omitted activation windows - I was hitting the limits of the free plan for the UML tool.
-
 ## Internal API documentation
 
 The only resource is the `/report` resource.
