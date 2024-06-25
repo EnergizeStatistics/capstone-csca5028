@@ -129,7 +129,7 @@ The form validates your input: the time period entries need to be on the half ho
 
 Entering the time period may seem tricky due to time differences and data availability. Let me give you an example:
 
-I'm writing this README on 2023-10-17 at 11:15 AM MDT. At this moment, the available measurement corresponds to the half-hour window from 11:00 AM to 11:30 AM MDT on 2023-10-17. However, the source data is in UTC time, which means this window corresponds to 2023-10-17 17:00 to 17:30 UTC.
+Historical data saved in my database is around October 2023. Let's take 2023-10-17 11:15 AM MDT as an example. The available measurement corresponds to the half-hour window from 11:00 AM to 11:30 AM MDT on 2023-10-17. However, the source data is in UTC time, which means this window corresponds to 2023-10-17 17:00 to 17:30 UTC.
 
 Instructions:
 
